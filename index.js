@@ -16,18 +16,26 @@ const url = process.env.URL;
 const port = process.env.PORT || 3000;
 const cors = require('cors')
 app.use(cors())
+const imageFolderPath = path.join(__dirname, "uploads");
+app.use("/uploads", express.static(imageFolderPath));
+
 mongoose.connect(url);
 const your_secret_key = "helloBanglaDesh"
 
-
+// monir 
 const userSchema = new mongoose.Schema({
   firstName: String,
   middleName: String,
   lastName: String,
-  email: String,
-  password: String,
+  email: {
+    type:String,required:true
+  },
+  password: {
+    type:String,required:true
+  },
   hobby: String,
   location: String,
+  img:String,
   timestamp: {
     type: Date,
     default: Date.now
@@ -53,7 +61,7 @@ const postSchema = mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Post'
+    ref: 'User'
   },
   comment: [
     {
@@ -293,7 +301,8 @@ app.get('/api/posts', verifyToken, async (req, res) => {
   const id = req.userId;
   // console.log(id);
   try {
-    const posts = await Post.find({ user: id });
+    // const posts = await Post.find({ user: id }).populate('user', 'lastName');
+    const posts = await User.findById(id).select('firstName lastName email').populate('post');
     res.status(200).json(posts);
   } catch (error) {
     console.error('Error finding posts:', error);
@@ -362,10 +371,15 @@ app.post('/api/comment',verifyToken,async(req,res)=>{
   
 });
 
-
+//Category
 app.get('/api/content/happy', async (req, res) => {
   try {
-    const happyPosts = await Post.find({ category: 'Happiness' }); // Assuming 'happy' is the category field in your Post model
+    const happyPosts = await Post.find({ category: 'Happiness' }).populate('user', 'firstName lastName email') // Assuming 'happy' is the category field in your Post model
+    // const happyPosts = await Post.find({ category: 'Happiness' }); 
+    // const posts = await User.findById(id).select('firstName lastName email').populate('post');
+
+    // Assuming 'happy' is the category field in your Post model
+    // console.log("happy",happyPosts);
     res.json(happyPosts);
     // console.log(object);
   } catch (error) {
