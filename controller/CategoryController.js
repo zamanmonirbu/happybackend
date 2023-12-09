@@ -1,3 +1,5 @@
+const Post = require("../model/PostModel");
+
 //Category
 const happyContent= async (req, res) => {
     try {

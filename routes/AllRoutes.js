@@ -65,10 +65,10 @@ router.put('/post/:id',verifyToken,UpdateSpecificPost);
 router.delete('/post/:id',verifyToken,deleteSpecificPost);
 
 //Categories
-router.get('/content/happy',verifyToken,happyContent);
-router.get('/content/sad',verifyToken,sadContent);
-router.get('/content/help',verifyToken,helpContent);
-router.get('/content/news',verifyToken,newsContent);
+router.get('/content/happy',happyContent);
+router.get('/content/sad',sadContent);
+router.get('/content/help',helpContent);
+router.get('/content/news',newsContent);
 
 //Like 
 router.post('/thanks',verifyToken,makeLike);

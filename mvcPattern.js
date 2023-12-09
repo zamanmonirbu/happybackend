@@ -9,6 +9,11 @@ require('dotenv').config();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 require('dotenv').config();
+const path = require('path');
+
+express.static('uploads')
+const imageFolderPath = path.join(__dirname, "uploads");
+app.use("/uploads", express.static(imageFolderPath));
 
 const url = process.env.URL;
 const port = process.env.PORT || 3000;
